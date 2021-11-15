@@ -1,4 +1,4 @@
-FROM php:8.0-fpm-alpine
+FROM php:8.1.0RC6-fpm-alpine3.14
 
 # Install system dependencies
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/latest-stable/main" >> /etc/apk/repositories
@@ -11,7 +11,7 @@ ARG PHP_EXTENSIONS="intl bcmath gd pdo_mysql opcache uuid exif pcntl zip sockets
 RUN install-php-extensions $PHP_EXTENSIONS
 
 # Install supervisord
-COPY --from=ochinchina/supervisord:latest /usr/local/bin/supervisord /usr/local/bin/supervisord
+COPY --from=ghcr.io/jbs-fm/supervisord:latest /usr/local/bin/supervisord /usr/local/bin/supervisord
 
 # Install caddy
 COPY --from=caddy:2.4.5 /usr/bin/caddy /usr/local/bin/caddy
