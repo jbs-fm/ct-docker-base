@@ -10,7 +10,7 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 ARG PHP_EXTENSIONS="intl bcmath gd pdo_mysql opcache uuid exif pcntl zip sockets gmp"
 RUN install-php-extensions $PHP_EXTENSIONS
 
-# Add & switch to non-root user: 'app'
+# Add non-root user: 'app'
 ENV NON_ROOT_GROUP=${NON_ROOT_GROUP:-app}
 ENV NON_ROOT_USER=${NON_ROOT_USER:-app}
 RUN addgroup -S $NON_ROOT_GROUP && adduser -S $NON_ROOT_USER -G $NON_ROOT_GROUP
