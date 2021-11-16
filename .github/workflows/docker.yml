@@ -3,6 +3,8 @@ name: docker
 on:
   push:
     branches: main
+    tags:
+      - 'v*'
 
 jobs:
   multi-registries:
@@ -11,6 +13,17 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v2
+      -
+        name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ghcr.io/jbs-fm/ct-docker-base
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -32,4 +45,5 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ghcr.io/jbs-fm/ct-docker-base:latest
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
